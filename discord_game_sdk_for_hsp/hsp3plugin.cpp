@@ -16,15 +16,15 @@
 */
 /*------------------------------------------------------------*/
 
-int p1,p2,p3,p4,p5,p6;
-int *type;
-int *val;
-PVal *mpval;		// Master PVal pointer
-HSPCTX *hspctx;		// Current Context
-HSPEXINFO *exinfo;	// Info for Plugins
+int p1, p2, p3, p4, p5, p6;
+int* type;
+int* val;
+PVal* mpval;		// Master PVal pointer
+HSPCTX* hspctx;		// Current Context
+HSPEXINFO* exinfo;	// Info for Plugins
 
 
-void hsp3sdk_init( HSP3TYPEINFO *info )
+void hsp3sdk_init(HSP3TYPEINFO* info)
 {
 	//		SDK初期化
 	//
@@ -35,7 +35,7 @@ void hsp3sdk_init( HSP3TYPEINFO *info )
 }
 
 
-int code_getprm( void )
+int code_getprm(void)
 {
 	//		パラメーターを取得(型は問わない)
 	//
@@ -46,23 +46,22 @@ int code_getprm( void )
 }
 
 
-void bms_send( BMSCR *bm, int x, int y, int sx, int sy )
+void bms_send(BMSCR* bm, int x, int y, int sx, int sy)
 {
 	//		ウインドゥ画面の更新
 	//
 	HDC hdc;
 	HPALETTE opal;
-	if (bm->fl_udraw==0) return;
-	hdc=GetDC( bm->hwnd );
-	if (bm->hpal!=NULL) {
-		opal=SelectPalette( hdc, bm->hpal, 0 );
-		RealizePalette( hdc );
+	if (bm->fl_udraw == 0) return;
+	hdc = GetDC(bm->hwnd);
+	if (bm->hpal != NULL) {
+		opal = SelectPalette(hdc, bm->hpal, 0);
+		RealizePalette(hdc);
 	}
-	BitBlt( hdc, x-bm->viewx, y-bm->viewy, sx, sy, bm->hdc,x,y, SRCCOPY );
-	if (bm->hpal!=NULL) {
-		SelectPalette( hdc, opal, 0 );
+	BitBlt(hdc, x - bm->viewx, y - bm->viewy, sx, sy, bm->hdc, x, y, SRCCOPY);
+	if (bm->hpal != NULL) {
+		SelectPalette(hdc, opal, 0);
 	}
-	ReleaseDC( bm->hwnd,hdc );
+	ReleaseDC(bm->hwnd, hdc);
 }
-
 

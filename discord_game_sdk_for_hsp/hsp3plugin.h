@@ -16,16 +16,16 @@
 #include "hsp3struct.h"			// hsp3 core define
 #include "hspwnd.h"				// hsp3 windows define
 
-extern int p1,p2,p3,p4,p5,p6;
-extern int *type;
-extern int *val;
-extern PVal *mpval;		// Master PVal pointer
-extern HSPCTX *hspctx;		// Current Context
-extern HSPEXINFO *exinfo;	// Info for Plugins
+extern int p1, p2, p3, p4, p5, p6;
+extern int* type;
+extern int* val;
+extern PVal* mpval;		// Master PVal pointer
+extern HSPCTX* hspctx;		// Current Context
+extern HSPEXINFO* exinfo;	// Info for Plugins
 
-void hsp3sdk_init( HSP3TYPEINFO *info );
-int code_getprm( void );
-void bms_send( BMSCR *bm, int x, int y, int sx, int sy );
+void hsp3sdk_init(HSP3TYPEINFO* info);
+int code_getprm(void);
+void bms_send(BMSCR* bm, int x, int y, int sx, int sy);
 
 #define code_next exinfo->HspFunc_prm_next
 #define puterror exinfo->HspFunc_puterror
@@ -59,7 +59,10 @@ void bms_send( BMSCR *bm, int x, int y, int sx, int sy );
 #define code_getd exinfo->HspFunc_prm_getd
 #define code_getdd exinfo->HspFunc_prm_getdd
 
-#define hspstat hspctx->stat
+#define code_getns exinfo->HspFunc_prm_getns
+#define code_getnds exinfo->HspFunc_prm_getnds
+
+#define nstat hspctx->stat
 #define active_window (*exinfo->actscr)
 
 #endif

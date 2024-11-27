@@ -17,12 +17,6 @@ static int cmdfunc(int cmd)
     code_next();                            // 次のコードを取得(最初に必ず必要です)
 
     switch (cmd) {                         // サブコマンドごとの分岐
-
-    case 0x00:                              // newcmd
-
-        p1 = code_getdi(123);     // 整数値を取得(デフォルト123)
-        hspstat = p1;                  // システム変数statに代入
-        break;
     default:
         puterror(HSPERR_UNSUPPORTED_FUNCTION);
     }
@@ -169,7 +163,8 @@ bool WINAPI DiscordInitialize(HSPEXINFO* hei)
 
     discord::Result result = discord::Core::Create(clientId, DiscordCreateFlags_Default, &core);
     if (!core || result != discord::Result::Ok) {
-        return 1;
+        nstat = static_cast<int>(result);
+        return 0;
     }
 
     return 0;
@@ -178,41 +173,55 @@ bool WINAPI DiscordInitialize(HSPEXINFO* hei)
 bool WINAPI DiscordUpdate(HSPEXINFO* hei)
 {
     if (!core) {
-        return 1;
+        nstat = -1;
+        return 0;
     }
 
     discord::Result result = core->RunCallbacks();
-    if (result != discord::Result::Ok) {
-        return 1;
+    nstat = static_cast<int>(result);
+    return 0;
+}
+
+bool WINAPI DiscordActivitySetState(HSPEXINFO* hei)
+{
+    char* _state = hei->HspFunc_prm_getns();
+    std::string state = _state;
+    if (hspctx->hspstat == HSPSTAT_UTF8) {
+        activity.SetState(state.c_str());
+    }
+    else {
+        activity.SetState(convertSJIStoUTF8(state).c_str());
     }
     return 0;
 }
 
-discord::Activity* WINAPI DiscordActivitySetState(HSPEXINFO* hei)
+bool WINAPI DiscordActivitySetDetails(HSPEXINFO* hei)
 {
-    char* _state = hei->HspFunc_prm_gets();
-    std::string state = _state;
-    activity.SetState(convertSJIStoUTF8(state).c_str());
-    return 0;
-}
-
-discord::Activity* WINAPI DiscordActivitySetDetails(HSPEXINFO* hei)
-{
-    char* _details = hei->HspFunc_prm_gets();
+    char* _details = hei->HspFunc_prm_getns();
     std::string details = _details;
-    activity.SetDetails(convertSJIStoUTF8(details).c_str());
+    if (hspctx->hspstat == HSPSTAT_UTF8) {
+        activity.SetDetails(details.c_str());
+    }
+    else {
+        activity.SetDetails(convertSJIStoUTF8(details).c_str());
+    }
     return 0;
 }
 
-discord::Activity* WINAPI DiscordActivitySetName(HSPEXINFO* hei)
+bool WINAPI DiscordActivitySetName(HSPEXINFO* hei)
 {
-    char* _name = hei->HspFunc_prm_gets();
+    char* _name = hei->HspFunc_prm_getns();
     std::string name = _name;
-    activity.SetName(convertSJIStoUTF8(name).c_str());
+    if (hspctx->hspstat == HSPSTAT_UTF8) {
+        activity.SetName(name.c_str());
+    }
+    else {
+        activity.SetName(convertSJIStoUTF8(name).c_str());
+    }
     return 0;
 }
 
-discord::Activity* WINAPI DiscordActivitySetType(HSPEXINFO* hei)
+bool WINAPI DiscordActivitySetType(HSPEXINFO* hei)
 {
     int _type = hei->HspFunc_prm_geti();
     if (_type == 0) {
@@ -232,19 +241,10 @@ discord::Activity* WINAPI DiscordActivitySetType(HSPEXINFO* hei)
 
 bool WINAPI DiscordUpdateActivity()
 {
-    static bool fresult = false;
+    static discord::Result fresult = discord::Result::Ok;
     core->ActivityManager().UpdateActivity(activity, [](discord::Result result) {
-        if (result == discord::Result::Ok) {
-            fresult = true;
-        }
-        else {
-            fresult = false;
-        }
+        fresult = result;
     });
-    if (fresult == true) {
-        return 0;
-    }
-    else {
-        return 1;
-    }
+    nstat = static_cast<int>(fresult);
+    return 0;
 }

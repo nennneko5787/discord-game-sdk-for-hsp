@@ -42,28 +42,28 @@
 
 #define HSPVAR_SUPPORT_MISCTYPE (HSPVAR_SUPPORT_ARRAYOBJ)
 
-typedef void * PDAT;							// データの実態へのポインタ
+typedef void* PDAT;							// データの実態へのポインタ
 typedef int APTR;								// 配列データへのオフセット値
 
 enum
 {
-CALCCODE_ADD = 0,
-CALCCODE_SUB,
-CALCCODE_MUL,
-CALCCODE_DIV,
-CALCCODE_MOD,
-CALCCODE_AND,
-CALCCODE_OR,
-CALCCODE_XOR,
-CALCCODE_EQ,
-CALCCODE_NE,
-CALCCODE_GT,
-CALCCODE_LT,
-CALCCODE_GTEQ,
-CALCCODE_LTEQ,
-CALCCODE_RR,
-CALCCODE_LR,
-CALCCODE_MAX
+	CALCCODE_ADD = 0,
+	CALCCODE_SUB,
+	CALCCODE_MUL,
+	CALCCODE_DIV,
+	CALCCODE_MOD,
+	CALCCODE_AND,
+	CALCCODE_OR,
+	CALCCODE_XOR,
+	CALCCODE_EQ,
+	CALCCODE_NE,
+	CALCCODE_GT,
+	CALCCODE_LT,
+	CALCCODE_GTEQ,
+	CALCCODE_LTEQ,
+	CALCCODE_RR,
+	CALCCODE_LR,
+	CALCCODE_MAX
 };
 
 
@@ -77,11 +77,11 @@ typedef struct
 	short	mode;		// mode (0=normal/1=clone/2=alloced)
 	int		len[5];		// length of array 4byte align (dim)
 	int		size;		// size of Val
-	char	*pt;		// ptr to array
+	char* pt;		// ptr to array
 
 	//	Memory Data structure (3.0 compatible)
 	//
-	void	*master;			// Master pointer for data
+	void* master;			// Master pointer for data
 	unsigned short	support;	// Support Flag
 	short	arraycnt;			// Array Set Count
 	int		offset;				// Array Data Offset
@@ -102,70 +102,70 @@ typedef struct
 	short basesize;						// １つのデータが使用するサイズ(byte) / 可変長の時は-1
 	short opt;							// (未使用)
 
-	char *vartype_name;					// 型タイプ名文字列へのポインタ
-	char *user;							// ユーザーデータ(未使用)
+	char* vartype_name;					// 型タイプ名文字列へのポインタ
+	char* user;							// ユーザーデータ(未使用)
 
 	//		システム参照・型変換用
 	//
-	void *(*Cnv)( const void *buffer, int flag );
-	void *(*CnvCustom)( const void *buffer, int flag );
-	PDAT *(*GetPtr)( PVal *pval );
+	void* (*Cnv)(const void* buffer, int flag);
+	void* (*CnvCustom)(const void* buffer, int flag);
+	PDAT* (*GetPtr)(PVal* pval);
 
-	void *(*ArrayObjectRead)( PVal *pval, int *mptype );// 配列要素の指定 (連想配列/読み出し)
-	void (*ArrayObject)( PVal *pval );							// 配列要素の指定 (連想配列/書き込み準備)
-	void (*ObjectWrite)( PVal *pval, void *data, int type );		// HSPVAR_SUPPORT_NOCONVERT指定時の代入
-	void (*ObjectMethod)( PVal *pval );							// 変数に対するメソッドの指定
+	void* (*ArrayObjectRead)(PVal* pval, int* mptype);// 配列要素の指定 (連想配列/読み出し)
+	void (*ArrayObject)(PVal* pval);							// 配列要素の指定 (連想配列/書き込み準備)
+	void (*ObjectWrite)(PVal* pval, void* data, int type);		// HSPVAR_SUPPORT_NOCONVERT指定時の代入
+	void (*ObjectMethod)(PVal* pval);							// 変数に対するメソッドの指定
 
-	void (*Alloc)( PVal *pval, const PVal *pval2 );		// 変数メモリを確保する
-	void (*Free)( PVal *pval );						// 変数メモリを解放する
+	void (*Alloc)(PVal* pval, const PVal* pval2);		// 変数メモリを確保する
+	void (*Free)(PVal* pval);						// 変数メモリを解放する
 
-	int (*GetSize)( const PDAT *pdat );			// 要素が使用するメモリサイズを返す(可変長のため)
-	int (*GetUsing)( const PDAT *pdat );			// 要素が使用中であるかを返す(varuse関数用)
+	int (*GetSize)(const PDAT* pdat);			// 要素が使用するメモリサイズを返す(可変長のため)
+	int (*GetUsing)(const PDAT* pdat);			// 要素が使用中であるかを返す(varuse関数用)
 
 	//		変数バッファ(バイナリ)のポインタとサイズを返す
 	//		(要素が可変長(str)の場合は該当する１配列バイナリのみ)
 	//		(要素が固定長(int,double)の場合は全配列バイナリ)
 	//		(サイズはメモリ確保サイズを返す)
-	void *(*GetBlockSize)( PVal *pval, PDAT *pdat, int *size );
+	void* (*GetBlockSize)(PVal* pval, PDAT* pdat, int* size);
 
 	//		バイナリデータ用にメモリブロックを確保する
 	//		(要素が可変長(str)の場合にブロックサイズを強制的に確保する)
 	//		(固定長の場合は何もしない)
-	void (*AllocBlock)( PVal *pval, PDAT *pdat, int size );
+	void (*AllocBlock)(PVal* pval, PDAT* pdat, int size);
 
 	//		代入用関数(型の一致が保障されます)
 	//
-	void (*Set)( PVal *pval, PDAT *pdat, const void *in );
+	void (*Set)(PVal* pval, PDAT* pdat, const void* in);
 
 	//		演算用関数(型の一致が保障されます)
 	//
-	void (*AddI)( PDAT *pval, const void *val );
-	void (*SubI)( PDAT *pval, const void *val );
-	void (*MulI)( PDAT *pval, const void *val );
-	void (*DivI)( PDAT *pval, const void *val );
-	void (*ModI)( PDAT *pval, const void *val );
+	void (*AddI)(PDAT* pval, const void* val);
+	void (*SubI)(PDAT* pval, const void* val);
+	void (*MulI)(PDAT* pval, const void* val);
+	void (*DivI)(PDAT* pval, const void* val);
+	void (*ModI)(PDAT* pval, const void* val);
 
-	void (*AndI)( PDAT *pval, const void *val );
-	void (*OrI)( PDAT *pval, const void *val );
-	void (*XorI)( PDAT *pval, const void *val );
+	void (*AndI)(PDAT* pval, const void* val);
+	void (*OrI)(PDAT* pval, const void* val);
+	void (*XorI)(PDAT* pval, const void* val);
 
-	void (*EqI)( PDAT *pval, const void *val );
-	void (*NeI)( PDAT *pval, const void *val );
-	void (*GtI)( PDAT *pval, const void *val );
-	void (*LtI)( PDAT *pval, const void *val );
-	void (*GtEqI)( PDAT *pval, const void *val );
-	void (*LtEqI)( PDAT *pval, const void *val );
+	void (*EqI)(PDAT* pval, const void* val);
+	void (*NeI)(PDAT* pval, const void* val);
+	void (*GtI)(PDAT* pval, const void* val);
+	void (*LtI)(PDAT* pval, const void* val);
+	void (*GtEqI)(PDAT* pval, const void* val);
+	void (*LtEqI)(PDAT* pval, const void* val);
 
-	void (*RrI)( PDAT *pval, const void *val );
-	void (*LrI)( PDAT *pval, const void *val );
+	void (*RrI)(PDAT* pval, const void* val);
+	void (*LrI)(PDAT* pval, const void* val);
 } HspVarProc;
 
-extern HspVarProc *hspvarproc;
+extern HspVarProc* hspvarproc;
 extern int hspvartype_max;
 
-typedef void (* HSPVAR_COREFUNC) (HspVarProc *);
+typedef void (*HSPVAR_COREFUNC) (HspVarProc*);
 
-extern PVal *mem_pval;
+extern PVal* mem_pval;
 #define HspVarCoreGetPVal( flag ) (&mem_pval[flag])
 
 
@@ -181,7 +181,7 @@ typedef struct
 	short customid;		// structure ID
 	short clonetype;	// typeID for clone
 	int size;			// data size
-	void *ptr;			// data ptr
+	void* ptr;			// data ptr
 } FlexValue;
 
 
@@ -197,25 +197,25 @@ typedef struct
 
 //		Core System Main Function
 //
-void HspVarCoreInit( void );
-void HspVarCoreBye( void );
-void HspVarCoreResetVartype( int expand );
+void HspVarCoreInit(void);
+void HspVarCoreBye(void);
+void HspVarCoreResetVartype(int expand);
 int HspVarCoreAddType();
-void HspVarCoreRegisterType( int flag, HSPVAR_COREFUNC func );
-HspVarProc *HspVarCoreSeekProc( const char *name );
+void HspVarCoreRegisterType(int flag, HSPVAR_COREFUNC func);
+HspVarProc* HspVarCoreSeekProc(const char* name);
 
 //		low level support functions
 //
-void HspVarCoreDup( PVal *pval, PVal *arg, APTR aptr );
-void HspVarCoreDupPtr( PVal *pval, int flag, void *ptr, int size );
-void HspVarCoreClear( PVal *pval, int flag );
-void HspVarCoreClearTemp( PVal *pval, int flag );
-void HspVarCoreDim( PVal *pval, int flag, int len1, int len2, int len3, int len4 );
-void HspVarCoreDimFlex( PVal *pval, int flag, int len0, int len1, int len2, int len3, int len4 );
-void HspVarCoreReDim( PVal *pval, int lenid, int len );
-void *HspVarCoreCnvPtr( PVal *pval, int flag );
-PDAT *HspVarCorePtrAPTR( PVal *pv, APTR ofs );
-void HspVarCoreArray( PVal *pval, int offset );
+void HspVarCoreDup(PVal* pval, PVal* arg, APTR aptr);
+void HspVarCoreDupPtr(PVal* pval, int flag, void* ptr, int size);
+void HspVarCoreClear(PVal* pval, int flag);
+void HspVarCoreClearTemp(PVal* pval, int flag);
+void HspVarCoreDim(PVal* pval, int flag, int len1, int len2, int len3, int len4);
+void HspVarCoreDimFlex(PVal* pval, int flag, int len0, int len1, int len2, int len3, int len4);
+void HspVarCoreReDim(PVal* pval, int lenid, int len);
+void* HspVarCoreCnvPtr(PVal* pval, int flag);
+PDAT* HspVarCorePtrAPTR(PVal* pv, APTR ofs);
+void HspVarCoreArray(PVal* pval, int offset);
 
 //		macro for PVal
 //
