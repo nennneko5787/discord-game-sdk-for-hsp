@@ -1,10 +1,21 @@
 LIBRARY "discord_game_sdk_for_hsp"
 
 EXPORTS
-	DiscordInitialize			@1
-	DiscordUpdate				@2
-	DiscordUpdateActivity		@3
-	DiscordActivitySetState		@4
-	DiscordActivitySetDetails	@5
-	DiscordActivitySetName		@6
-	DiscordActivitySetType		@7
+	DiscordInitialize						@1
+	DiscordUpdate							@2
+	DiscordUpdateActivity					@3
+	DiscordActivitySetState					@4
+	DiscordActivitySetDetails				@5
+	DiscordActivitySetName					@6
+	DiscordActivitySetType					@7
+	DiscordActivitySetInstance				@8
+	DiscordActivitySetSupportedPlatforms	@9
+	DiscordActivitySetApplicationId			@10
+	DiscordActivitySetSmallImage			@11
+	DiscordActivitySetSmallText				@12
+	DiscordActivitySetLargeImage			@13
+	DiscordActivitySetLargeText				@14
+	DiscordActivitySetStart					@15
+	DiscordActivitySetEnd					@16
+	DiscordActivitySetPartyId				@17
+	DiscordActivitySetPartyPrivacy			@18
